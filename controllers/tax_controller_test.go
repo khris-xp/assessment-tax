@@ -103,6 +103,27 @@ func TestCalculateTax(t *testing.T) {
 			},
 		}, http.StatusOK},
 
+		// Check allowances
+
+		{"StatusOK when Income 70,000, WHT 10,000, Donation 100,001", 70000.0, 10000.0, []struct {
+			allowanceType string
+			amount        float64
+		}{
+			{
+				"donation",
+				100001.0,
+			},
+		}, http.StatusOK},
+		{"StatusOK  when Income 70,000, WHT 10,000, Donation 100,000", 70000.0, 10000.0, []struct {
+			allowanceType string
+			amount        float64
+		}{
+			{
+				"donation",
+				100000.0,
+			},
+		}, http.StatusOK},
+
 		{"StatusBadRequest when Income MinFloat64, WHT MinFloat64", -1.7976931348623157e+308, -1.7976931348623157e+308, []struct {
 			allowanceType string
 			amount        float64
@@ -131,6 +152,10 @@ func TestCalculateTax(t *testing.T) {
 				0.0,
 			},
 		}, http.StatusBadRequest},
+		{"StatusBadRequest when Allowances empty", 10000.0, 0.0, []struct {
+			allowanceType string
+			amount        float64
+		}{}, http.StatusBadRequest},
 	}
 
 	for _, tt := range tests {
