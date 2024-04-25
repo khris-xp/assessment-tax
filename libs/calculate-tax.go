@@ -7,7 +7,11 @@ import (
 func CalculateTax(totalIncome float64, allowances []dto.AllowancesType) float64 {
 	var totalAllowances float64
 	for _, allowance := range allowances {
-		totalAllowances += allowance.Amount
+		if allowance.AllowancesType == "donation" && allowance.Amount > 100000 {
+			totalAllowances = 100000
+		} else {
+			totalAllowances += allowance.Amount
+		}
 	}
 
 	return totalIncome - totalAllowances

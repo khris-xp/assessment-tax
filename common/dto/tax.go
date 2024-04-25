@@ -7,6 +7,6 @@ type TaxRequest struct {
 }
 
 type AllowancesType struct {
-	AllowancesType string  `json:"allowancesType"`
+	AllowancesType string  `json:"allowanceType"`
 	Amount         float64 `json:"amount"`
 }
