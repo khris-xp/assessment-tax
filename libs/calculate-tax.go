@@ -4,13 +4,13 @@ import (
 	"github.com/khris-xp/assessment-tax/common/dto"
 )
 
-func CalculateTax(totalIncome float64, wht float64, allowances []dto.AllowancesType) float64 {
+func CalculateTax(totalIncome float64, allowances []dto.AllowancesType) float64 {
 	var totalAllowances float64
 	for _, allowance := range allowances {
 		totalAllowances += allowance.Amount
 	}
 
-	return totalIncome - totalAllowances - wht
+	return totalIncome - totalAllowances
 }
 
 func CalculateTaxRate(income float64) float64 {
