@@ -23,11 +23,15 @@ func (t TaxController) CalculateTax(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Total income must be greater than or equal to 0")
 	}
 
-	if (taxRequest.Wht > taxRequest.TotalIncome) {
+	if len(taxRequest.Allowances) == 0 {
+		return c.JSON(http.StatusBadRequest, "Allowances must not be empty")
+	}
+
+	if taxRequest.Wht > taxRequest.TotalIncome {
 		return c.JSON(http.StatusBadRequest, "Withholding tax must be less than total income")
 	}
 
-	if (taxRequest.TotalIncome <= 150000) {
+	if taxRequest.TotalIncome <= 150000 {
 		return c.JSON(http.StatusOK, response.TaxResponse{Tax: 0})
 	}
 
