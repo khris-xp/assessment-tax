@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/khris-xp/assessment-tax/common/dto"
@@ -20,6 +21,7 @@ func (t TaxController) CalculateTax(c echo.Context) error {
 	}
 
 	if err := validate.ValidateTaxRequest(taxRequest); err != nil {
+		fmt.Println("Error : ", err.Error())
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 
