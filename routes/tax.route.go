@@ -13,4 +13,5 @@ func TaxRoutes(e *echo.Echo) {
 
 	e.POST("/tax/calculations", tCl.CalculateTax)
 	e.POST("/admin/deductions/personal", tCl.CreatePersonalDeduction, middlewares.AuthMiddleware)
+	e.POST("tax/calculations/upload-csv", tCl.TaxCalculateFormCsv)
 }

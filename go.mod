@@ -7,6 +7,7 @@ require github.com/labstack/echo/v4 v4.11.4
 require github.com/fatih/color v1.16.0 // indirect
 
 require (
+	github.com/gocarina/gocsv v0.0.0-20231116093920-b87c2d0e983a
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.4.3 // indirect
