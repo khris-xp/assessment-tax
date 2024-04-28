@@ -24,12 +24,21 @@ func (t TaxController) CalculateTax(c echo.Context) error {
 	var taxRequest dto.TaxRequest
 	db := config.DB()
 	var personal_deduction models.PersonalDeduction
+	var k_receipt models.KReceipt
 
 	if err := db.First(&personal_deduction).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.JSON(http.StatusBadRequest, "Personal deduction is not set")
 		} else {
 			return c.JSON(http.StatusInternalServerError, fmt.Sprintf("Failed to get personal deduction: %v", err))
+		}
+	}
+
+	if err := db.First(&k_receipt).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(http.StatusBadRequest, "K receipt is not set")
+		} else {
+			return c.JSON(http.StatusInternalServerError, fmt.Sprintf("Failed to get K receipt: %v", err))
 		}
 	}
 
@@ -53,7 +62,7 @@ func (t TaxController) CalculateTax(c echo.Context) error {
 		{"2,000,001 ขึ้นไป", 2000001, -1},
 	}
 
-	tax_calculate := libs.CalculateTax(taxRequest.TotalIncome, taxRequest.Allowances)
+	tax_calculate := libs.CalculateTax(taxRequest.TotalIncome, taxRequest.Allowances, k_receipt.KReceipt)
 	tax_total_with_deduction := tax_calculate - personal_deduction.PersonalDeduction
 
 	tax_rate := libs.CalculateTaxRate(tax_total_with_deduction)
@@ -76,6 +85,18 @@ func (t TaxController) CalculateTax(c echo.Context) error {
 }
 
 func (c *TaxController) TaxCalculateFormCsv(ctx echo.Context) error {
+
+	db := config.DB()
+	var k_receipt models.KReceipt
+
+	if err := db.First(&k_receipt).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ctx.JSON(http.StatusBadRequest, "K receipt is not set")
+		} else {
+			return ctx.JSON(http.StatusInternalServerError, fmt.Sprintf("Failed to get K receipt: %v", err))
+		}
+	}
+
 	taxFile, err := ctx.FormFile("taxFile")
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, "Expected bad request error, got no error or different status code")
@@ -113,7 +134,7 @@ func (c *TaxController) TaxCalculateFormCsv(ctx echo.Context) error {
 			return ctx.JSON(http.StatusBadRequest, err.Error())
 		}
 
-		tax_calculate := libs.CalculateTax(taxRequest.TotalIncome, taxRequest.Allowances)
+		tax_calculate := libs.CalculateTax(taxRequest.TotalIncome, taxRequest.Allowances, k_receipt.KReceipt)
 		tax_total_with_deduction := tax_calculate - constants.TaxDeductionInit().Deduction
 		tax_rate := libs.CalculateTaxRate(tax_total_with_deduction)
 		tax := float64(tax_rate.Income) - taxRequest.Wht

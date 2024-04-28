@@ -24,6 +24,7 @@ func main() {
 
 	routes.TaxRoutes(e)
 	routes.PersonalDeductionRoutes(e)
+	routes.KReceiptRoutes(e)
 	port := config.EnvPort()
 	dbGorm.Ping()
 

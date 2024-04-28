@@ -5,7 +5,7 @@ import (
 	"github.com/khris-xp/assessment-tax/types"
 )
 
-func CalculateTax(totalIncome float64, allowances []dto.AllowancesType) float64 {
+func CalculateTax(totalIncome float64, allowances []dto.AllowancesType, k_receipt float64) float64 {
 	var totalAllowances float64
 
 	for _, allowance := range allowances {
@@ -19,6 +19,9 @@ func CalculateTax(totalIncome float64, allowances []dto.AllowancesType) float64 
 		case "k-receipt":
 			if allowance.Amount > 50000 {
 				totalAllowances += 50000
+			}
+			if allowance.Amount > k_receipt {
+				totalAllowances += k_receipt
 			}
 		default:
 			totalAllowances += allowance.Amount

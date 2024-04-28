@@ -39,3 +39,13 @@ func ValidatePersonalDeductionAmount(amount float64) error {
 	}
 	return nil
 }
+
+func ValidateKReceiptAmount(amount float64) error {
+	if amount < 60000 {
+		return errors.New("K-Receipt must be at least 50,000")
+	}
+	if amount > 100000 {
+		return errors.New("K-Receipt must be at most 100,000")
+	}
+	return nil
+}
