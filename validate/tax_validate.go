@@ -29,3 +29,13 @@ func ValidateTaxRequest(req dto.TaxRequest) error {
 
 	return nil
 }
+
+func ValidatePersonalDeductionAmount(amount float64) error {
+	if amount < 60000 {
+		return errors.New("Personal deduction must be at least 60,000")
+	}
+	if amount > 100000 {
+		return errors.New("Personal deduction must be at most 100,000")
+	}
+	return nil
+}
