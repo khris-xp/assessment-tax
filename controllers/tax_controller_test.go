@@ -103,8 +103,6 @@ func TestCalculateTax(t *testing.T) {
 			},
 		}, http.StatusOK},
 
-		// Check allowances
-
 		{"StatusOK when Income 70,000, WHT 10,000, Donation 100,001", 70000.0, 10000.0, []struct {
 			allowanceType string
 			amount        float64

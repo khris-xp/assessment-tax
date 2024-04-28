@@ -1,24 +1,30 @@
 package config
 
 import (
-	"database/sql"
-	"log"
-	"os"
+	"fmt"
 
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-type Database struct {
-	Conn *sql.DB
+var database *gorm.DB
+var e error
+
+func DatabaseInit() {
+	host := EnvHost()
+	user := EnvUser()
+	password := EnvPassword()
+	dbName := EnvDBName()
+	port := 5432
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Jakarta", host, user, password, dbName, port)
+	database, e = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	if e != nil {
+		panic(e)
+	}
 }
 
-func NewDatabase() *Database {
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("Database connected")
-
-	return &Database{Conn: db}
+func DB() *gorm.DB {
+	return database
 }
