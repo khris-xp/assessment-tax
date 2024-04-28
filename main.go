@@ -23,6 +23,7 @@ func main() {
 	}
 
 	routes.TaxRoutes(e)
+	routes.PersonalDeductionRoutes(e)
 	port := config.EnvPort()
 	dbGorm.Ping()
 
