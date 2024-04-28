@@ -10,3 +10,9 @@ type AllowancesType struct {
 	AllowancesType string  `json:"allowanceType"`
 	Amount         float64 `json:"amount"`
 }
+
+type TaxCSV struct {
+	TotalIncome float64 `csv:"totalIncome"`
+	Donation    float64 `csv:"donation"`
+	Wht         float64 `csv:"wht"`
+}

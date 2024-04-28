@@ -5,6 +5,7 @@ type PersonalDeduction struct {
 	PersonalDeduction float64 `json:"personal_deduction"`
 }
 
+
 func (PersonalDeduction) TableName() string {
 	return "personaldeduction"
 }
